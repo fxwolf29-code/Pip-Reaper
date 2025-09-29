@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="24dp"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <TextView android:id="@+id/status" android:text="Welcome to Pip Reaper" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <ProgressBar android:id="@+id/progressBar" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="wrap_content" android:progress="0" />
+    <Button android:id="@+id/btnPick" android:text="Pick file & Convert" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <Button android:id="@+id/btnBatch" android:text="Batch mode" android:layout_width="match_parent" android:layout_height="wrap_content" />
+    <Button android:id="@+id/btnSignOut" android:text="Sign Out" android:layout_width="match_parent" android:layout_height="wrap_content" />
+</LinearLayout>
