@@ -1,35 +1,45 @@
-name: Android CI
+
+name: Build Android APK
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    paths:
+      - 'app/**'
+      - 'build.gradle*'
+      - 'settings.gradle*'
+      - '.github/workflows/android.yml'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up JDK
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
+          distribution: temurin
           java-version: '17'
+          cache: 'gradle'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
+      - name: Ensure Gradle wrapper exists (fallback to 8.7)
+        run: |
+          chmod +x ./gradlew || true
+          if [ ! -f gradlew ]; then
+            echo "Gradle wrapper missing — generating one"
+            curl -sLo gradle.zip https://services.gradle.org/distributions/gradle-8.7-bin.zip
+            mkdir -p $HOME/gradle && unzip -q gradle.zip -d $HOME/gradle
+            $HOME/gradle/gradle-8.7/bin/gradle wrapper --gradle-version 8.7
+            chmod +x ./gradlew
+          fi
 
       - name: Build Debug APK
         run: ./gradlew assembleDebug
 
-      - name: Upload APK
+      - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: PIP-REAPER-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
